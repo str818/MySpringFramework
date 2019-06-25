@@ -7,7 +7,6 @@ package com.str818.spring.framework.context.support;
  */
 public abstract class MyAbstractApplicationContext {
     // 受保护，只提供给子类重写
-    protected void refresh(){}
-
+    protected void refresh() throws Exception{}
 
 }

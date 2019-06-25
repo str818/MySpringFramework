@@ -6,6 +6,7 @@ import com.str818.spring.framework.beans.support.MyBeanDefinitionReader;
 import com.str818.spring.framework.beans.support.MyDefaultListableBeanFactory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：str818
@@ -27,7 +28,7 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
     }
 
     @Override
-    protected void refresh() {
+    protected void refresh() throws Exception {
 
         // 1. 定位配置文件
         reader = new MyBeanDefinitionReader(this.configLoactions);
@@ -42,10 +43,29 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
         doAutowrited();
     }
 
+    // 只处理非延时加载的情况
     private void doAutowrited() {
+        for (Map.Entry<String, MyBeanDefinition> beanDefinitionEntry : super.beanDefinitionMap.entrySet()) {
+            String beanName = beanDefinitionEntry.getKey();
+            if(!beanDefinitionEntry.getValue().isLazyInit()) {
+                try {
+                    getBean(beanName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    private void doRegisterBeanDefinition(List<MyBeanDefinition> beanDefinitions) {
+    // 将配置信息放入到IOC容器中
+    private void doRegisterBeanDefinition(List<MyBeanDefinition> beanDefinitions) throws Exception {
+
+        for (MyBeanDefinition beanDefinition: beanDefinitions) {
+            if(super.beanDefinitionMap.containsKey(beanDefinition.getFactoryBeanName())){
+                throw new Exception("The “" + beanDefinition.getFactoryBeanName() + "” is exists!!");
+            }
+            super.beanDefinitionMap.put(beanDefinition.getFactoryBeanName(),beanDefinition);
+        }
     }
 
     public Object getBean(String beanName) {

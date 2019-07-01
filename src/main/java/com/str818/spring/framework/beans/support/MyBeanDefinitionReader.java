@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * @author ：str818
- * @description：
+ * @description：读取 Bean
  * @date ：Created in 2019/6/25 16:36
  */
 public class MyBeanDefinitionReader {

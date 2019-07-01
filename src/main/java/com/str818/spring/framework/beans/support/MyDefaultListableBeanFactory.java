@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ：str818
- * @description：
+ * @description： 伪 IOC 容器
  * @date ：Created in 2019/6/25 16:10
  */
 public class MyDefaultListableBeanFactory extends MyAbstractApplicationContext {

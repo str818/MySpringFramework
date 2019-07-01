@@ -1,12 +1,14 @@
 package com.str818.spring.framework.context;
 
 import com.str818.spring.framework.beans.MyBeanFactory;
+import com.str818.spring.framework.beans.MyBeanWrapper;
 import com.str818.spring.framework.beans.config.MyBeanDefinition;
 import com.str818.spring.framework.beans.support.MyBeanDefinitionReader;
 import com.str818.spring.framework.beans.support.MyDefaultListableBeanFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ：str818
@@ -16,8 +18,17 @@ import java.util.Map;
 public class MyApplicationContext extends MyDefaultListableBeanFactory implements MyBeanFactory {
 
     private String [] configLoactions;
+
+    // Bean 信息的读取类
     private MyBeanDefinitionReader reader;
 
+    //单例的 IOC 容器缓存
+    private Map<String,Object> factoryBeanObjectCache = new ConcurrentHashMap<>();
+
+    // 通用的 IOC 容器
+    private Map<String,MyBeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+
+    // 构造方法
     public MyApplicationContext(String... configLoactions){
         this.configLoactions = configLoactions;
         try {
